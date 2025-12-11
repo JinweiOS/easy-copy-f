@@ -73,8 +73,6 @@ import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
 // --- Styles ---
 import "@/components/tiptap-templates/simple/simple-editor.scss";
 
-import content from "@/components/tiptap-templates/simple/data/content.json";
-
 const MainToolbarContent = ({
   onHighlighterClick,
   onLinkClick,
@@ -175,14 +173,17 @@ const MobileToolbarContent = ({
     )}
   </>
 );
-
+let saveTimeout: number;
 export function SimpleEditor() {
+  const DEBOUNCE_DELAY = 500; // 防抖延迟1秒
   const isMobile = useIsBreakpoint();
   const { height } = useWindowSize();
   const [mobileView, setMobileView] = useState<"main" | "highlighter" | "link">(
     "main"
   );
   const toolbarRef = useRef<HTMLDivElement>(null);
+
+  const [content, setContent] = useState("");
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -222,9 +223,27 @@ export function SimpleEditor() {
       }),
     ],
     content,
-  });
+    onUpdate: ({ editor }) => {
+      // 清除之前的定时器
+      clearTimeout(saveTimeout);
+      // 设置新的定时器
+      saveTimeout = setTimeout(() => {
+        // 获取JSON或HTML格式内容
+        const text = editor.getJSON();
+        console.log("Auto-saving content:", text);
+        fetch("https://api.beingthink.com:666/api/content/save", {
+          method: "POST",
+          body: JSON.stringify(text),
+        });
+      }, DEBOUNCE_DELAY);
+    },
+    onCreate: async ({ editor }) => {
+      // Focus the editor when it's created
 
-  editor?.getJSON()
+      const result = await fetch("https://api.beingthink.com:666/api/content/load");
+      editor.commands.setContent(await result.json());
+    },
+  });
 
   const rect = useCursorVisibility({
     editor,

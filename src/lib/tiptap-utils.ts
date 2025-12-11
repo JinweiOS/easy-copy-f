@@ -13,7 +13,7 @@ import {
   type NodeWithPos,
 } from "@tiptap/react";
 
-export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+export const MAX_FILE_SIZE = 5 * 1024 * 1024 * 10; // 50MB
 
 export const MAC_SYMBOLS: Record<string, string> = {
   mod: "⌘",
@@ -389,7 +389,7 @@ export const handleImageUpload = async (
   const formData = new FormData();
   formData.append("file", file);
   let progress = 0;
-  const res = await fetch("http://192.168.1.167:3000/upload", {
+  const res = await fetch("https://api.beingthink.com:666/api/upload", {
     method: "POST",
     body: formData,
   });
