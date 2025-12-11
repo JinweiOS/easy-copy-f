@@ -216,7 +216,7 @@ export function SimpleEditor() {
       ImageUploadNode.configure({
         accept: "image/*",
         maxSize: MAX_FILE_SIZE,
-        limit: 3,
+        limit: 1,
         upload: handleImageUpload,
         onError: (error) => console.error("Upload failed:", error),
       }),
