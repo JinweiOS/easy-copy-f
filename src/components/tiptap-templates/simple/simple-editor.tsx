@@ -224,6 +224,8 @@ export function SimpleEditor() {
     content,
   });
 
+  editor?.getJSON()
+
   const rect = useCursorVisibility({
     editor,
     overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,

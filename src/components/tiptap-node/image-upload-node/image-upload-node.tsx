@@ -95,7 +95,18 @@ function useFileUpload(options: UploadOptions) {
     }
 
     const abortController = new AbortController()
-    const fileId = crypto.randomUUID()
+    // 仅https支持crypto
+    // const fileId = crypto.randomUUID()
+    const fileId = randomString(12)
+    function randomString(length: number) {
+      const chars =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+      let result = ""
+      for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length))
+      }
+      return result
+    }
 
     const newFileItem: FileItem = {
       id: fileId,
@@ -423,7 +434,7 @@ const DropZoneContent: React.FC<{ maxSize: number; limit: number }> = ({
 
     <div className="tiptap-image-upload-content">
       <span className="tiptap-image-upload-text">
-        <em>Click to upload</em> or drag and drop
+        <em>点击上传</em> 或 拖拽放置
       </span>
       <span className="tiptap-image-upload-subtext">
         Maximum {limit} file{limit === 1 ? "" : "s"}, {maxSize / 1024 / 1024}MB
