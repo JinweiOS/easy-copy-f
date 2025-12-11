@@ -183,7 +183,6 @@ export function SimpleEditor() {
   );
   const toolbarRef = useRef<HTMLDivElement>(null);
 
-  const [content, setContent] = useState("");
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -222,7 +221,7 @@ export function SimpleEditor() {
         onError: (error) => console.error("Upload failed:", error),
       }),
     ],
-    content,
+    content: "",
     onUpdate: ({ editor }) => {
       // 清除之前的定时器
       clearTimeout(saveTimeout);
