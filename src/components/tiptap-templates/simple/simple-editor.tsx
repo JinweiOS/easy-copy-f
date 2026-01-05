@@ -230,7 +230,7 @@ export function SimpleEditor() {
         // 获取JSON或HTML格式内容
         const text = editor.getJSON();
         console.log("Auto-saving content:", text);
-        fetch("https://api.beingthink.com:666/api/content/save", {
+        fetch("https://api.beingthink.com/api/easycopy/content/save", {
           method: "POST",
           body: JSON.stringify(text),
         });
@@ -239,8 +239,10 @@ export function SimpleEditor() {
     onCreate: async ({ editor }) => {
       // Focus the editor when it's created
 
-      const result = await fetch("https://api.beingthink.com:666/api/content/load");
-      editor.commands.setContent(await result.json());
+      const result = await fetch("https://api.beingthink.com/api/easycopy/content/load");
+      const res = await result.json();
+      console.log(res)
+      editor.commands.setContent(JSON.parse(res.content));
     },
   });
 

@@ -389,14 +389,15 @@ export const handleImageUpload = async (
   const formData = new FormData();
   formData.append("file", file);
   let progress = 0;
-  const res = await fetch("https://api.beingthink.com:666/api/upload", {
+  const res = await fetch("https://api.beingthink.com/api/easycopy/file/save", {
     method: "POST",
     body: formData,
   });
   const result = await res.json();
+  console.log(result)
   progress = 100;
   onProgress?.({ progress });
-  return result.url;
+  return result.data?.url;
 };
 
 type ProtocolOptions = {
