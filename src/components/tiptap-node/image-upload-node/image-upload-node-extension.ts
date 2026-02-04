@@ -3,6 +3,32 @@ import { ReactNodeViewRenderer } from "@tiptap/react"
 import { ImageUploadNode as ImageUploadNodeComponent } from "@/components/tiptap-node/image-upload-node/image-upload-node"
 import type { NodeType } from "@tiptap/pm/model"
 
+// Valid MIME types for images only
+export const VALID_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+  "image/svg+xml",
+]
+/**
+ * Check if a file is a valid image based on MIME type
+ */
+export function isValidImageType(file: File): boolean {
+  return VALID_IMAGE_TYPES.includes(file.type)
+}
+
+/**
+ * Get file type category: 'image' | 'document'
+ * All files are supported - images are rendered, others can be downloaded
+ */
+export function getFileTypeCategory(
+  file: File
+): "image" | "document" {
+  if (isValidImageType(file)) return "image"
+  return "document"
+}
+
 export type UploadFunction = (
   file: File,
   onProgress?: (event: { progress: number }) => void,
@@ -97,6 +123,9 @@ export const ImageUploadNode = Node.create<ImageUploadNodeOptions>({
       },
       maxSize: {
         default: this.options.maxSize,
+      },
+      files: {
+        default: [],
       },
     }
   },
